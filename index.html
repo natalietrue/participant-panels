@@ -1,0 +1,925 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>The Realities of Participant Panels</title>
+<meta name="description" content="A practitioner's guide to advocating for, building, and sustaining research participant panels, drawn from 25 industry interviews. From the ResearchOps Community.">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Bitter:ital,wght@0,400;0,500;0,600;1,400&display=swap">
+<style>
+:root{
+  --cream:#F3F6FE; --cream-2:#E6EDFD; --ink:#000000; --ink-2:#1F2430; --muted:#5B6478;
+  --cobalt:#005AF6; --navy:#00389A; --peri:#D2DEFC; --sky:#005AF6; --orange:#005AF6; --violet:#00389A; --amber:#D2DEFC; --green:#005AF6; --brown:#000000; --terra:#D2DEFC; --deep:#000000;
+  --bg:var(--cream); --fg:var(--ink); --panel:#FFFFFF; --line:rgba(0,56,154,.16);
+  --nav-w:272px;
+  --display:"Young Serif",Georgia,serif; --body:"Bitter",Georgia,serif;
+  box-sizing:border-box; padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){ :root:not([data-theme="light"]){
+  --cream:#0B1430; --cream-2:#121D42; --ink:#F3F6FE; --ink-2:#D9E2F7; --muted:#9FB0D6; --panel:#151F45; --line:rgba(243,246,254,.18); color-scheme:dark;
+}}
+:root[data-theme="dark"]{ --cream:#0B1430; --cream-2:#121D42; --ink:#F3F6FE; --ink-2:#D9E2F7; --muted:#9FB0D6; --panel:#151F45; --line:rgba(243,246,254,.18); color-scheme:dark; }
+html{scroll-behavior:smooth}
+*,*::before,*::after{box-sizing:inherit;margin:0}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:1.0625rem;line-height:1.6;-webkit-font-smoothing:antialiased}
+a{color:inherit}
+:focus-visible{outline:3px solid var(--sky);outline-offset:3px}
+
+/* ---------- reveal ---------- */
+.rv{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.2,.7,.2,1),transform .8s cubic-bezier(.2,.7,.2,1)}
+.rv.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){ html{scroll-behavior:auto} .rv{opacity:1;transform:none;transition:none} *{animation:none!important} }
+
+/* ---------- side nav ---------- */
+.nav-toggle{position:fixed;top:calc(18px + env(safe-area-inset-top,0px));left:18px;z-index:60;width:44px;height:44px;border-radius:999px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer;display:grid;place-items:center;transition:left .35s cubic-bezier(.2,.7,.2,1)}
+.nav-toggle span{display:block;width:16px;height:2px;background:currentColor;position:relative}
+.nav-toggle span::before,.nav-toggle span::after{content:"";position:absolute;left:0;width:16px;height:2px;background:currentColor;transition:transform .3s}
+.nav-toggle span::before{top:-5px}.nav-toggle span::after{top:5px}
+body.nav-open .nav-toggle{left:calc(var(--nav-w) - 62px)}
+body.nav-open .nav-toggle span{background:transparent}
+body.nav-open .nav-toggle span::before{transform:translateY(5px) rotate(45deg)}
+body.nav-open .nav-toggle span::after{transform:translateY(-5px) rotate(-45deg)}
+.sidenav{position:fixed;inset:0 auto 0 0;width:var(--nav-w);background:var(--panel);border-right:1px solid var(--line);z-index:50;transform:translateX(-100%);transition:transform .35s cubic-bezier(.2,.7,.2,1);display:flex;flex-direction:column;overflow:hidden;padding:calc(76px + env(safe-area-inset-top,0px)) 0 0 24px;font-size:.9rem}
+.sidenav>ol{overflow-y:auto;flex:1;padding:0 20px 48px 0;scrollbar-width:thin}
+body.nav-open .sidenav{transform:none}
+.sidenav h2{font-family:var(--display);font-size:1rem;font-weight:400;margin:0 0 18px;color:var(--muted)}
+.sidenav ol{list-style:none;padding:0}
+.sidenav .ch{margin-bottom:22px}
+.sidenav .ch>a{display:flex;gap:12px;align-items:baseline;text-decoration:none;font-family:var(--display);font-weight:400;font-size:1.02rem;line-height:1.25;padding:6px 0}
+.sidenav .ch>a .n{font-size:1.5rem;min-width:22px;color:var(--muted)}
+.sidenav .ch ol{margin:4px 0 0 34px;border-left:2px solid var(--line)}
+.sidenav .ch ol a{display:block;text-decoration:none;color:var(--muted);padding:5px 0 5px 14px;margin-left:-2px;border-left:2px solid transparent;line-height:1.35}
+.sidenav a.active{color:var(--fg)}
+.sidenav .ch ol a.active{border-left-color:var(--sky);color:var(--fg)}
+.sidenav .ch>a.active .n{color:var(--sky)}
+.scrim{position:fixed;inset:0;background:rgba(36,20,24,.4);z-index:45;opacity:0;pointer-events:none;transition:opacity .3s}
+@media (max-width:1100px){ body.nav-open .scrim{opacity:1;pointer-events:auto} }
+main{transition:padding-left .35s cubic-bezier(.2,.7,.2,1)}
+@media (min-width:1101px){ body.nav-open main{padding-left:var(--nav-w)} }
+
+/* ---------- layout ---------- */
+.wrap{max-width:1180px;margin:0 auto;padding:0 clamp(20px,5vw,64px)}
+.col{max-width:68ch}
+@media (min-width:1101px){
+  .wrap{max-width:none;padding:0 max(clamp(20px,5vw,64px),calc((100% - 1000px)/2))}
+  .strip-wrap{margin-left:0;margin-right:0;width:100%;overflow:visible}
+  section.block{overflow-x:clip}
+  .strip-wrap .pin>.col{padding-left:0}
+  .strip{padding-left:0}
+}
+section.block{padding:clamp(56px,8vw,112px) 0}
+section.block+section.block{border-top:1px solid var(--line)}
+h2.sec{font-family:var(--display);font-weight:400;font-size:clamp(1.8rem,3.2vw,2.7rem);line-height:1.1;margin:0 0 28px;max-width:22ch}
+h3{font-family:var(--display);font-weight:400;font-size:1.3rem;line-height:1.25;margin:40px 0 12px}
+h4{font-family:var(--display);font-weight:400;font-size:1.05rem;margin:28px 0 8px}
+p{margin:0 0 1.1em}
+p.lead{font-size:1.25rem;line-height:1.5;color:var(--ink-2)}
+ul.plain{padding-left:1.2em;margin:0 0 1.2em}
+ul.plain li{margin-bottom:.5em}
+
+/* ---------- grain ---------- */
+.grainy::after{content:"";position:absolute;inset:0;opacity:.3;mix-blend-mode:soft-light;pointer-events:none;background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>")}
+
+/* ---------- hero ---------- */
+.hero{position:relative;min-height:100vh;min-height:100svh;display:grid;grid-template-rows:1fr auto auto;color:#fff;overflow:hidden;isolation:isolate}
+.hero .grad{position:absolute;inset:0;z-index:-1;background:
+  radial-gradient(60% 80% at 20% 30%, #FF6B3D 0%, transparent 70%),
+  radial-gradient(55% 75% at 80% 75%, #6A3FE0 0%, transparent 70%),
+  radial-gradient(70% 60% at 60% 20%, #F2A33A 0%, transparent 65%),
+  linear-gradient(135deg,#F0552F,#8B3FD9 70%,#4A2BC2)}
+.hero .top{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:calc(24px + env(safe-area-inset-top,0px)) clamp(20px,5vw,64px) 0 clamp(80px,5vw,64px);font-size:.9rem}
+@media (max-width:760px){.hero .top{padding-left:80px;padding-right:20px}}
+.hero .top .brand{font-family:var(--display)}
+.hero .title{display:grid;place-content:center;text-align:center;padding:40px clamp(20px,5vw,64px)}
+.hero h1{font-family:var(--display);font-weight:400;font-size:clamp(2.8rem,8vw,7.2rem);line-height:.98;letter-spacing:-.01em}
+.hero h1 b{font-weight:400;display:block;color:#fff}
+.hero .sub{margin:28px auto 0;max-width:48ch;font-size:clamp(1rem,1.6vw,1.25rem);line-height:1.5;opacity:.92}
+.authors{margin:26px auto 0;font-size:.95rem;max-width:60ch;opacity:.92}
+.authors a{text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.5)}
+.chapters{background:var(--cream);color:var(--fg);border-top:1px solid var(--line)}
+.chapters ol{list-style:none;padding:0;display:grid;grid-template-columns:repeat(4,1fr)}
+.chapters li+li{border-left:1px solid var(--line)}
+.chapters a{display:block;text-decoration:none;padding:28px clamp(16px,2.5vw,36px) 36px;transition:background .2s}
+.chapters a:hover{background:var(--cream-2)}
+.chapters a:hover .num{color:var(--sky)}
+.chapters .num{font-family:var(--display);font-size:clamp(3.4rem,7vw,6.5rem);line-height:.95;transition:color .2s}
+.chapters .name{font-family:var(--display);font-size:clamp(.95rem,1.3vw,1.1rem);line-height:1.25;margin-top:16px}
+.chapters .desc{font-size:.85rem;color:var(--muted);margin-top:8px;line-height:1.4}
+@media (max-width:760px){ .chapters ol{grid-template-columns:1fr 1fr} .chapters li:nth-child(3){border-left:0;border-top:1px solid var(--line)} .chapters li:nth-child(4){border-top:1px solid var(--line)} }
+
+/* ---------- opener ---------- */
+.opener{min-height:100vh;min-height:100svh;background:var(--deep);color:#F2ECE3;display:flex;align-items:center;justify-content:center;text-align:center;padding:80px clamp(20px,5vw,64px);position:relative;overflow:hidden}
+.opener .big{z-index:0;font-family:var(--display);font-size:clamp(9rem,34vw,30rem);line-height:.8;color:transparent;-webkit-text-stroke:1.5px rgba(242,236,227,.4);position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);user-select:none;pointer-events:none}
+.opener .big.rv{transform:translate(-50%,-44%)}.opener .big.rv.in{transform:translate(-50%,-50%)}
+.opener .inner{position:relative;max-width:860px;z-index:2}
+.opener h2{font-family:var(--display);font-weight:400;font-size:clamp(2rem,4.2vw,3.6rem);line-height:1.08}
+.opener .kicker{position:absolute;left:0;right:0;top:calc(36px + env(safe-area-inset-top,0px));text-align:center;font-family:var(--display);font-size:1.1rem;letter-spacing:.02em;margin:0;z-index:3}
+.opener .tile{position:absolute;width:clamp(120px,22vw,320px);aspect-ratio:1.2;border-radius:14px;z-index:1}
+.opener .tile.l{left:clamp(-40px,-2vw,0px);top:12%;background:linear-gradient(120deg,#F0552F,#F2A33A 60%,#F6C27C)}
+.opener .tile.r{right:clamp(-40px,-2vw,0px);bottom:12%;background:linear-gradient(300deg,#6A3FE0,#8B5CF6 55%,#C4B5FD)}
+
+/* ---------- pinned horizontal strip ---------- */
+.strip-wrap{position:relative;margin:36px calc(-1 * clamp(20px,5vw,64px)) 8px}
+.strip-wrap .pin{position:sticky;top:10vh;overflow:hidden;padding:4px 0 8px}
+.strip-wrap .pin>.col{padding:0 clamp(20px,5vw,64px);margin-bottom:8px}
+.strip-wrap .pin>.col>h2.sec,.strip-wrap .pin>.col>h3{margin-top:0}
+.strip{display:flex;gap:16px;padding:0 clamp(20px,5vw,64px);will-change:transform}
+.strip-wrap.native .pin{position:static;overflow-x:auto;scrollbar-width:none}
+.strip-wrap.native .pin::-webkit-scrollbar{display:none}
+.card{flex:0 0 min(340px,82vw);border-radius:14px;padding:28px 26px 30px;color:var(--ink);display:flex;flex-direction:column;min-height:300px}
+.card h4{margin:0 0 14px;font-size:1.4rem;line-height:1.15}
+.card p{font-size:.95rem;line-height:1.5;margin:0;opacity:.9}
+.card .who{margin-top:auto;padding-top:18px;font-size:.85rem;opacity:.75}
+.card.green{background:var(--green);color:#F2ECE3}.card.brown{background:var(--brown);color:#F2ECE3}.card.terra{background:var(--terra);color:#F2ECE3}.card.violet{background:#4B2DB8;color:#F2ECE3}.card.sky{background:#2F7FC2;color:#F2ECE3}
+.card.cream{background:var(--panel);border:1px solid var(--line)}
+.card a{color:inherit}
+
+/* ---------- quote block ---------- */
+.quote{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:clamp(28px,4vw,44px);margin:36px 0;display:grid;grid-template-columns:auto 1fr;gap:28px;align-items:start}
+.quote .mark{font-family:var(--display);font-size:3.2rem;line-height:.6;color:var(--sky);padding-top:14px}
+.quote .ctx{font-size:.95rem;color:var(--muted);margin:0 0 14px;line-height:1.45}
+.quote blockquote{font-family:var(--display);font-weight:400;font-size:clamp(1.2rem,2.1vw,1.6rem);line-height:1.32}
+.quote .by{margin-top:18px;font-size:.9rem;color:var(--muted);display:flex;gap:12px;align-items:center}
+.quote .by .av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,var(--sky),var(--violet));flex:none}
+.quote .by b{color:var(--fg);font-weight:600;display:block}
+.quote.dark{background:var(--deep);color:#F2ECE3;border-color:transparent}
+.quote.dark .ctx,.quote.dark .by{color:rgba(242,236,227,.7)}.quote.dark .by b{color:#F2ECE3}
+.quote.blue{background:var(--sky);color:var(--ink);border-color:transparent}
+.quote.blue .mark{color:var(--ink)}.quote.blue .ctx,.quote.blue .by,.quote.blue .by b{color:var(--ink)}
+.quote.blue .by .av{background:linear-gradient(135deg,var(--ink),var(--violet))}
+@media (max-width:600px){.quote{grid-template-columns:1fr;gap:10px}.quote .mark{display:none}}
+
+/* ---------- case study ---------- */
+.case{display:grid;grid-template-columns:minmax(160px,.9fr) 2fr;border-radius:16px;overflow:hidden;margin:40px 0;background:var(--panel);border:1px solid var(--line)}
+.case .tile{position:relative;min-height:220px;overflow:hidden;isolation:isolate;color:#fff}
+.case .tile .water{position:absolute;inset:-12%;z-index:-1;background:linear-gradient(160deg,#F0552F 0%,#F2A33A 45%,#6A3FE0 110%);background-size:160% 160%;animation:drift 14s ease-in-out infinite alternate;filter:url(#water)}
+.case:nth-of-type(even) .tile .water{background:linear-gradient(200deg,#6A3FE0 0%,#8B5CF6 40%,#F0552F 110%);background-size:160% 160%}
+@keyframes drift{0%{background-position:0% 0%}100%{background-position:100% 100%}}
+.case .tile .label{position:absolute;left:22px;top:20px;font-family:var(--display);font-size:.95rem}
+.case .tile .fig{position:absolute;left:22px;right:18px;bottom:18px;font-family:var(--display);font-size:clamp(2.2rem,4vw,3.4rem);line-height:1}
+.case .tile .fig small{display:block;font-size:.8rem;font-family:var(--body);opacity:.9;margin-top:6px}
+.case .body{padding:clamp(24px,3.5vw,40px)}
+.case .body h4{margin:0 0 4px;font-size:1.35rem}
+.case .body .role{color:var(--muted);font-size:.9rem;margin-bottom:16px}
+.case .body p:last-child{margin-bottom:0}
+@media (max-width:700px){.case{grid-template-columns:1fr}.case .tile{min-height:150px}}
+
+/* ---------- stats ---------- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px;margin:36px 0}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:22px 20px 18px}
+.stat .v{font-family:var(--display);font-size:clamp(2.1rem,3.8vw,3.2rem);line-height:1}
+.stat .l{font-size:.85rem;color:var(--muted);margin-top:10px;line-height:1.35}
+
+/* ---------- callouts ---------- */
+.callout{border-left:3px solid var(--sky);padding:4px 0 4px 22px;margin:36px 0;color:var(--ink-2)}
+.callout.amber{border-left-color:var(--amber)}
+.callout h4{margin:0 0 8px}
+.callout p:last-child{margin-bottom:0}
+.prompt{background:var(--deep);color:#F2ECE3;border-radius:14px;padding:clamp(22px,3vw,34px);margin:28px 0;font-size:.95rem;line-height:1.55}
+.prompt h4{margin:0 0 12px;color:var(--sky)}
+.prompt ul{padding-left:1.2em;margin:.6em 0}
+.formula{background:var(--deep);color:#F2ECE3;border-radius:14px;padding:clamp(32px,5vw,56px) clamp(22px,4vw,44px);margin:36px 0;text-align:center;font-family:var(--display)}
+.formula .f{font-size:clamp(1.05rem,2.2vw,1.6rem);line-height:1.4}
+.formula .f span{color:var(--sky)}
+.formula .ex{margin-top:22px;font-family:var(--body);font-size:.95rem;color:rgba(242,236,227,.75);max-width:56ch;margin-left:auto;margin-right:auto}
+
+/* ---------- tables ---------- */
+.tbl-wrap{overflow-x:auto;margin:32px 0}
+table.tbl{border-collapse:collapse;width:100%;min-width:640px;font-size:.95rem}
+.tbl th,.tbl td{text-align:left;vertical-align:top;padding:16px 16px;border-bottom:1px solid var(--line)}
+.tbl th{font-family:var(--display);font-weight:400;font-size:.95rem}
+.tbl thead th{border-bottom:2px solid var(--fg)}
+.tbl td:first-child{font-family:var(--display)}
+.bvb{display:grid;grid-template-columns:1.1fr 1.6fr 1.6fr;margin:36px 0;border-radius:14px;overflow:hidden;border:1px solid var(--line);font-size:.95rem}
+.bvb>div{padding:18px 20px;border-bottom:1px solid var(--line)}
+.bvb .h{font-family:var(--display);font-size:1.05rem;line-height:1.2}
+.bvb .h small{display:block;font-family:var(--body);font-size:.8rem;opacity:.75;margin-bottom:6px}
+.bvb .lab{font-family:var(--display);background:var(--cream-2)}
+.bvb .build{background:var(--sky);color:var(--ink)}
+.bvb .buy{background:var(--deep);color:#F2ECE3}
+.bvb .build b,.bvb .buy b{display:block;font-family:var(--display);font-weight:400;font-size:1.1rem;margin-bottom:4px}
+.bvb .build span,.bvb .buy span{opacity:.8}
+.bvb .foot{grid-column:1/-1;background:var(--panel);border-bottom:0}
+@media (max-width:640px){.bvb{grid-template-columns:1fr}}
+
+/* ---------- outro ---------- */
+.next{background:var(--deep);color:#F2ECE3;padding:clamp(56px,8vw,96px) 0}
+.next a{display:inline-flex;gap:14px;align-items:baseline;text-decoration:none;font-family:var(--display);font-size:clamp(1.5rem,2.8vw,2.4rem);border-bottom:2px solid var(--sky);padding-bottom:6px}
+.next a .n{color:var(--sky)}
+.next .k{color:rgba(242,236,227,.6);margin-bottom:12px}
+footer{padding:48px 0 calc(48px + env(safe-area-inset-bottom,0px));font-size:.9rem;color:var(--muted);border-top:1px solid var(--line)}
+footer .wrap{display:flex;flex-wrap:wrap;gap:12px 32px;justify-content:space-between}
+footer a{text-decoration:underline;text-underline-offset:3px}
+
+
+
+/* ---------- natalieathomas.com pass ---------- */
+body{font-size:1.0625rem;line-height:1.65}
+.hero{color:#000}
+.hero .grad{background:linear-gradient(160deg,#E8EEFD 0%,#D2DEFC 60%,#C3D2FA 100%)}
+.hero .grad.grainy::after{opacity:.1}
+.hero .top,.hero .top .brand{color:var(--navy)}
+.hero h1,.hero h1 b{color:var(--cobalt)}
+.hero h1 small{display:block;font-size:.55em;line-height:1.1;margin-bottom:.1em}
+.hero .eyebrow{font-family:var(--display);font-size:clamp(1rem,1.5vw,1.25rem);color:var(--navy);margin:0 0 18px}
+.hero .sub{color:#000}
+.hero .sub{color:var(--navy);opacity:1}
+.hero .authors{color:var(--navy);opacity:1} .hero .authors a{text-decoration-color:rgba(0,56,154,.45)}
+.chapters{background:#fff;border-top:0}
+.chapters li+li{border-left:1px solid var(--line)}
+.chapters .num{color:var(--cobalt)} .chapters .name{color:#000} .chapters .desc{color:var(--muted)}
+.chapters li{display:flex} .chapters a{flex:1;height:100%;box-sizing:border-box}
+.chapters a:hover{background:var(--cobalt);color:#fff} .chapters a:hover .num,.chapters a:hover .name,.chapters a:hover .desc{color:#fff}
+.opener{background:#000;color:#fff}
+.opener .big{-webkit-text-stroke:1.5px rgba(255,255,255,.45)} .opener .kicker{color:var(--acc-yellow)}
+.opener .tile.l{background:linear-gradient(120deg,#005AF6,#5B8CFF)} .opener .tile.r{background:linear-gradient(300deg,#D2DEFC,#F3F6FE)}
+.card{border-radius:18px}
+.card.green{background:var(--cobalt);color:#fff} .card.brown{background:#000;color:#fff} .card.terra{background:var(--peri);color:var(--navy)} .card.violet{background:var(--navy);color:#fff} .card.sky{background:#fff;color:#000;border:1px solid var(--line)}
+.card.cream{background:#fff;color:#000;border:1px solid var(--line)}
+.card.terra .who,.card.sky .who,.card.cream .who{opacity:.75}
+.card h4{font-weight:400}
+.quote{background:#fff;border:1px solid var(--line);border-radius:18px} .quote .mark{color:var(--cobalt)} .quote .by .av{background:var(--cobalt)} .quote .by b{color:var(--navy)} .quote .ctx{color:var(--muted)}
+.quote.dark{background:#000;color:#fff;border:0} .quote.dark .mark{color:#fff} .quote.dark .ctx,.quote.dark .by{color:rgba(255,255,255,.75)} .quote.dark .by b{color:#fff} .quote.dark .by .av{background:var(--cobalt)}
+.quote.blue{background:var(--cobalt);color:#fff;border:0} .quote.blue .mark,.quote.blue .ctx,.quote.blue .by,.quote.blue .by b{color:#fff} .quote.blue .by .av{background:#fff}
+.case{background:#fff;border:1px solid var(--line);border-radius:18px} .case .body h4{color:#000} .case .body .role{color:var(--cobalt)}
+.case .tile .water,.case:nth-of-type(even) .tile .water{background:linear-gradient(160deg,#00389A 0%,#005AF6 55%,#7FA4FF 110%);background-size:160% 160%}
+.case:nth-of-type(even) .tile .water{background:linear-gradient(200deg,#005AF6 0%,#3D7BFF 50%,#D2DEFC 115%)}
+.case .tile.grainy::after{opacity:.14}
+.stat{background:#fff;border:1px solid var(--line);border-radius:18px} .stat .v{color:var(--cobalt)}
+h2.sec,h3{color:#000;font-weight:400}
+.callout{background:#fff;border-left:3px solid var(--cobalt);border-radius:0 14px 14px 0;padding:18px 22px} .callout.amber{border-left-color:#000} .callout h4{color:var(--navy)}
+.prompt,.formula{background:#000;color:#fff;border-radius:18px} .prompt h4{color:#7FA4FF} .formula .f span{color:#7FA4FF} .formula .ex{color:rgba(255,255,255,.75)}
+.bvb{border:1px solid var(--line);border-radius:18px} .bvb .build{background:var(--cobalt);color:#fff} .bvb .buy{background:#000;color:#fff} .bvb .lab{background:var(--peri);color:var(--navy)} .bvb .foot{background:#fff}
+.tbl thead th{border-bottom-color:#000} .tbl td:first-child{color:var(--navy)}
+a{color:var(--cobalt)} .card a,.chapters a,.sidenav a,.next a,.hero a{color:inherit}
+.sidenav{background:#fff} .sidenav .ch ol a.active{border-left-color:var(--cobalt)} .sidenav .ch>a.active .n{color:var(--cobalt)} .sidenav .ch>a .n{color:var(--cobalt);opacity:.55} .sidenav .ch>a.active .n{opacity:1}
+.nav-toggle{background:var(--cobalt);color:#fff;border:0}
+.next{background:var(--cobalt);color:#fff} .next a{border-bottom-color:#fff} .next a .n{color:#fff} .next .k{color:rgba(255,255,255,.75)}
+footer{background:#fff}
+
+/* tiles + accents */
+:root{--acc-orange:#F08A4B;--acc-yellow:#F8D44C;--acc-blue:#5DADF4}
+.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:14px;margin:8px 0 32px}
+.tile-link{display:flex;flex-direction:column;gap:10px;background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px 24px 28px;text-decoration:none;color:#000;transition:background .2s,color .2s,transform .2s}
+.tile-link .n{font-family:var(--display);font-size:2.6rem;line-height:1;color:var(--cobalt)}
+.tile-link b{font-family:var(--display);font-weight:400;font-size:1.2rem;line-height:1.25}
+.tile-link>span:last-child{font-size:.95rem;color:var(--muted);line-height:1.45}
+.tile-link:hover{background:var(--cobalt);color:#fff;transform:translateY(-2px)} .tile-link:hover .n,.tile-link:hover>span:last-child{color:#fff}
+.quote .by .av{background:linear-gradient(135deg,#F08A4B,#FBD5BC)}
+.quote:nth-of-type(3n+2) .by .av{background:linear-gradient(135deg,#F8D44C,#FCF0B8)}
+.quote:nth-of-type(3n) .by .av{background:linear-gradient(135deg,#5DADF4,#C9E3FB)}
+.quote.dark .by .av{background:#fff} .quote.blue .by .av{background:#fff}
+.callout{border-left-color:var(--acc-orange)} .callout.amber{border-left-color:var(--acc-yellow)}
+.formula .f span,.prompt h4{color:var(--acc-yellow)}
+.sidenav .ch ol a.active{border-left-color:var(--acc-orange)}
+
+.authors-sec{background:var(--navy);border-top:0;color:#fff}
+.authors-sec h2.sec,.authors-sec .author h4 a{color:#fff} .authors-sec .author p{color:rgba(255,255,255,.85)} .authors-sec .note{color:rgba(255,255,255,.7)} .authors-sec .note a{color:#fff} .authors-sec .author h4 a{border-bottom-color:var(--acc-yellow)}
+.authors-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:28px 40px;margin:8px 0 28px}
+.author{display:flex;gap:16px;align-items:flex-start}
+.author .av{flex:none;width:52px;height:52px;border-radius:50%;background:var(--acc-orange)}
+.author:nth-child(2) .av{background:var(--acc-yellow)} .author:nth-child(3) .av{background:var(--acc-blue)} .author:nth-child(4) .av{background:var(--cobalt)}
+.author h4{margin:4px 0 6px;font-size:1.15rem} .author h4 a{color:#000;text-decoration:none;border-bottom:2px solid var(--cobalt)}
+.author p{font-size:.95rem;line-height:1.5;margin:0;color:var(--ink-2)}
+.note{color:var(--muted);font-size:.9rem}
+
+.hero .byline{background:var(--navy);color:#fff;font-size:.92rem;padding:18px 0}
+.hero .byline .wrap{display:flex;justify-content:center;text-align:center}
+.hero .byline a{color:#fff;text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(255,255,255,.5)}
+.hero .byline>.wrap>a{font-family:var(--display);text-decoration:none;white-space:nowrap}
+</style>
+</head>
+<body class="nav-open">
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><filter id="water" x="-20%" y="-20%" width="140%" height="140%"><feTurbulence type="fractalNoise" baseFrequency="0.012 0.018" numOctaves="2" seed="3" result="n"><animate attributeName="baseFrequency" dur="18s" values="0.012 0.018;0.018 0.012;0.012 0.018" repeatCount="indefinite"/></feTurbulence><feDisplacementMap in="SourceGraphic" in2="n" scale="40" xChannelSelector="R" yChannelSelector="G"/></filter></svg>
+<button class="nav-toggle" id="navToggle" aria-label="Toggle contents" aria-expanded="true" aria-controls="sidenav"><span></span></button>
+<div class="scrim" id="scrim"></div>
+<nav class="sidenav" id="sidenav" aria-label="Contents">
+  <h2>Contents</h2>
+  <ol>
+    <li class="ch"><a href="#ch1" data-ch="ch1"><span class="n">1</span>The realities of panels</a>
+      <ol>
+        <li><a href="#s1-1">About this project</a></li>
+        <li><a href="#s1-2">Supposed to be a how-to</a></li>
+        <li><a href="#s1-3">What we mean by panel</a></li>
+        <li><a href="#s1-4">What isn't covered</a></li>
+        <li><a href="#s1-5">There is no one way</a></li>
+        <li><a href="#s1-6">How the series is organized</a></li>
+      </ol></li>
+    <li class="ch"><a href="#ch2" data-ch="ch2"><span class="n">2</span>Why teams build panels (and when to buy)</a>
+      <ol>
+        <li><a href="#s2-1">Benefits of an owned panel</a></li>
+        <li><a href="#s2-2">Speed and efficiency</a></li>
+        <li><a href="#s2-3">Self-service and democratization</a></li>
+        <li><a href="#s2-4">Quality, depth, longitudinal potential</a></li>
+        <li><a href="#s2-5">Cost</a></li>
+        <li><a href="#s2-6">Diversity and hard-to-reach audiences</a></li>
+        <li><a href="#s2-7">PII, compliance, and legal drivers</a></li>
+        <li><a href="#s2-8">When not to build a panel</a></li>
+        <li><a href="#s2-9">Build vs. buy</a></li>
+      </ol></li>
+    <li class="ch"><a href="#ch3" data-ch="ch3"><span class="n">3</span>Setting up your research panel</a>
+      <ol>
+        <li><a href="#s3-1">A panel is a lifecycle</a></li>
+        <li><a href="#s3-2">Who to involve before you build</a></li>
+        <li><a href="#s3-3">Choosing your tooling</a></li>
+        <li><a href="#s3-4">Build your success criteria</a></li>
+        <li><a href="#s3-5">Define your segments</a></li>
+        <li><a href="#s3-6">How big does my panel need to be?</a></li>
+        <li><a href="#s3-7">Start recruiting</a></li>
+        <li><a href="#s3-8">What to do after setup</a></li>
+      </ol></li>
+    <li class="ch"><a href="#ch4" data-ch="ch4"><span class="n">4</span>Managing and maintaining a healthy panel</a>
+      <ol>
+        <li><a href="#s4-1">Keep participants engaged</a></li>
+        <li><a href="#s4-2">Avoid participant burnout</a></li>
+        <li><a href="#s4-3">Avoid consent drift</a></li>
+        <li><a href="#s4-4">Healthy representation</a></li>
+        <li><a href="#s4-5">Improve efficiency with automation</a></li>
+        <li><a href="#s4-6">Measure success</a></li>
+        <li><a href="#s4-7">When to shut down a panel</a></li>
+        <li><a href="#s4-8">The panel is never finished</a></li>
+      </ol></li>
+  </ol>
+</nav>
+
+<main id="main">
+<header class="hero">
+  <div class="grad grainy"></div>
+  <div class="top"></div>
+  <div class="title">
+    <h1 class="rv"><small>The realities of</small><b>participant panels</b></h1>
+    <p class="sub">A practitioner's guide to advocating for, building, and sustaining research panels, drawn from 25 industry interviews.</p>
+  </div>
+  <div class="chapters">
+    <ol>
+      <li><a href="#ch1"><div class="num rv">1</div><div class="name">The realities of panels</div><div class="desc">Why this isn't a how-to guide, and what we mean by panel</div></a></li>
+      <li><a href="#ch2"><div class="num rv">2</div><div class="name">Why teams build panels</div><div class="desc">The drivers behind owned panels, and when to buy instead</div></a></li>
+      <li><a href="#ch3"><div class="num rv">3</div><div class="name">Setting up your panel</div><div class="desc">Stakeholders, tooling, segments, size, and first recruits</div></a></li>
+      <li><a href="#ch4"><div class="num rv">4</div><div class="name">Keeping it healthy</div><div class="desc">Engagement, consent, representation, metrics, and endings</div></a></li>
+    </ol>
+  </div>
+  <div class="byline"><div class="wrap"><span>By <a href="https://www.linkedin.com/in/donald-cox-6455435/" target="_blank" rel="noopener">Donald Cox</a>, <a href="https://www.linkedin.com/in/alex-x-jones" target="_blank" rel="noopener">Alex Jones</a>, <a href="https://www.linkedin.com/in/natalieathomas/" target="_blank" rel="noopener">Natalie Thomas</a>, and <a href="https://www.linkedin.com/in/andrewwismer" target="_blank" rel="noopener">Andrew Wismer</a> for the <a href="https://researchops.community/" target="_blank" rel="noopener">ResearchOps Community</a></span></div></div>
+</header>
+
+<!-- ================= CHAPTER 1 ================= -->
+<section class="opener" id="ch1" data-chapter>
+  <div class="big rv">1</div>
+  <p class="kicker">Part one</p><div class="inner rv"><h2 class="rv">The realities of panels: it only looks easy from the outside.</h2></div>
+</section>
+
+<section class="block" id="s1-1" data-section="ch1"><div class="wrap"><div class="col">
+  <h2 class="sec rv">About this project</h2>
+  <p class="lead">This piece is part of the ResearchOps community's ongoing volunteer project exploring the Participant Lifecycle. Based on community feedback, this series focuses on participant panels.</p>
+  <p>Panels are often seen as a cornerstone of scaling research because they promise to solve one of its biggest headaches: recruiting participants. But like most initiatives, they succeed less often than you might hope, and the path to making them look easy is long, winding, and not entirely within your control.</p>
+  <p>As diligent researchers, we started with desk research. Content on panels has exploded in recent years (see Kate Towsey's <em>Research That Scales</em>), and we figured a roundup of existing research would be a great start. While we found plenty of articles about panels, most of it stayed high level and almost all of it was written by vendors with a product to sell. We found few case studies and virtually no unbiased guidebooks on how to navigate the decisions teams actually face when building a panel.</p>
+  <p>To fill that gap, we interviewed 25 practitioners from the ResearchOps community who had set up a panel, managed one, or often both. This series draws on their experiences across a range of panels, including B2C, B2B, government, and non-profit or third sector.</p>
+  <div class="stats">
+    <div class="stat rv"><div class="v">25</div><div class="l">Practitioners interviewed</div></div>
+    <div class="stat rv"><div class="v">4</div><div class="l">Sectors: B2C, B2B, government, non-profit</div></div>
+    <div class="stat rv"><div class="v">0</div><div class="l">Composite quotes. Every story is a real conversation</div></div>
+  </div>
+</div></div></section>
+
+<section class="block" id="s1-2" data-section="ch1"><div class="wrap"><div class="col">
+  <h2 class="sec rv">This was supposed to be a how-to guide</h2>
+  <p>We started with a simple goal: write a how-to guide for building and running a participant panel, grounded in the experiences of real researchers. A small convenience-sample survey surfaced consistent themes around the objectives, challenges, and success metrics of panels, and we planned follow-up conversations to add context, color, and detail.</p>
+  <p>But then we talked to people. As expected, many echoed the core themes from our survey and desk research. What we didn't expect was how much each researcher's context and constraints revealed a bouquet of experiences rather than a repeated linear path.</p>
+  <p>So this series won't give you a single playbook for building a panel. Instead, it shares the stories practitioners told us, in the hope they help you tackle your own mix of challenges and constraints.</p>
+</div></div></section>
+
+<section class="block" id="s1-3" data-section="ch1"><div class="wrap"><div class="col">
+  <h2 class="sec rv">What do we mean by panel?</h2>
+  <p>Ask ten researchers to define a panel and you'll get ten answers, but most converge on something like this: "a set of potential respondents who have declared that they will cooperate for future research projects." That's useful to hold onto, because it names the one thing every version of a panel shares: access. Beyond that, size, audience, and management style all vary.</p>
+  <p>That variance is wide enough that "panel" can mean a plain spreadsheet you email twice a year, or something with screening, profiling, and dedicated tooling behind it. Both get called a panel, and both can be good.</p>
+  <div class="quote"><div class="mark">"</div><div><p class="ctx">As Ted Kendall put it:</p><blockquote>If you had a customer list and you were just sending out a regular survey every once in a while, you can do that, and you can call it a panel. But it's not leveraging what a panel can be.</blockquote><div class="by"><span class="av"></span><span><b>Ted Kendall</b>Market Researcher, CPG and packaging</span></div></div></div>
+  <h3 class="rv">General panel fundamentals</h3>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card green"><h4>Consent to repeat contact</h4><p>Participants have agreed to, and expect, being contacted again.</p></div>
+    <div class="card brown"><h4>Utility beyond one project</h4><p>Their value to the organization outlives any single study.</p></div>
+    <div class="card terra"><h4>Baseline data up front</h4><p>Some level of profile data is collected at sign-up for screening and targeting.</p></div>
+    <div class="card violet"><h4>Built for research</h4><p>The relationship exists primarily for the organization's research purposes.</p></div>
+  </div></div>
+</div></section>
+
+<section class="block" id="s1-4" data-section="ch1"><div class="wrap"><div class="col">
+  <h2 class="sec rv">What isn't covered here</h2>
+  <p>Four adjacent things get called panels, or get confused with them. This series leaves them alone.</p>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card cream"><h4>Communities</h4><p>We consider panels fundamentally hub-and-spoke: one organization developing individual relationships with many individuals. When panelists start interacting with each other, it moves closer to a community. The two overlap in practice, but communities are out of scope.</p></div>
+    <div class="card cream"><h4>Third-party panels</h4><p>Most of these stories reflect owned panels a researcher set up and grew. Third-party providers can fast-track panel creation, but this series is designed to support anyone building their own.</p></div>
+    <div class="card cream"><h4>Customer advisory boards</h4><p>Leveraged similarly to panels, but the nature of the relationships, size, and duration tend to differ. We don't broach advisory boards here.</p></div>
+    <div class="card cream"><h4>Synthetic panels</h4><p>A newer, and still hotly debated, form of research. This project doesn't touch synthetic research, digital twins, or other customer-like panels.</p></div>
+  </div></div>
+</div></section>
+
+<section class="block" id="s1-5" data-section="ch1"><div class="wrap"><div class="col">
+  <h2 class="sec rv">There is no one way</h2>
+  <p class="lead">The zone of success for a panel is defined by three forces: your participants, your organization, and the resources you can marshal to create and sustain the panel. To succeed, you need a way that works for all three.</p>
+  <p>Throughout this series you'll hear from researchers on how they navigated real-world constraints. Every quote and case study is a real conversation, not a composite. The point isn't that you should do exactly what any one of them did. Rather, we hope you use their stories to better define and navigate your own constraints.</p>
+</div></div></section>
+
+<section class="block" id="s1-6" data-section="ch1"><div class="wrap"><div class="col">
+  <h2 class="sec rv">How this series is organized</h2>
+  <p>The articles roughly align with the phases our experts encountered. In practice, your experience may not line up one-for-one with the order laid out here. You may need to bounce back and forth as you have the necessary conversations and build support and buy-in.</p>
+  </div>
+  <div class="tiles">
+    <a class="tile-link" href="#ch2"><span class="n">2</span><b>Why research teams build panels (and when they should buy instead)</b><span>Explores the different drivers behind the panels our practitioners were involved with.</span></a>
+    <a class="tile-link" href="#ch3"><span class="n">3</span><b>Setting up your research panel</b><span>The practical considerations frequently encountered when starting a panel from scratch, so you can put a plan in place before you hit them yourself.</span></a>
+    <a class="tile-link" href="#ch4"><span class="n">4</span><b>Managing and maintaining a healthy panel</b><span>Ongoing management: once birthed, how do you keep it alive?</span></a>
+  </div>
+  <div class="col">
+</div></div></section>
+<!-- ================= CHAPTER 2 ================= -->
+<section class="opener" id="ch2" data-chapter>
+  <div class="big rv">2</div><div class="tile l grainy"></div><div class="tile r grainy"></div>
+  <p class="kicker">Part two</p><div class="inner rv"><h2 class="rv">Why research teams build panels, and when they should buy instead.</h2></div>
+</section>
+
+<section class="block" id="s2-1" data-section="ch2"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Recruitment is the bottleneck</h2>
+  <p class="lead">If you've spent any meaningful time doing research, you already know the feeling: a project lands, the brief is clear, and then you spend weeks in preparation alone. Finding people. Chasing responses. Coordinating calendars. Sending the same email for the fifth time.</p>
+  <div class="quote dark"><div class="mark">"</div><div><p class="ctx">Recruitment is a persistent operational bottleneck in research.</p><blockquote>The biggest time sink in UX research is finding, recruiting, and identifying participants.</blockquote><div class="by"><span class="av"></span><span><b>VP of Digital Products</b></span></div></div></div>
+  <p>Teams that have built participant panels describe a different experience entirely: one where the infrastructure is established before research needs emerge. But before building a panel, consider the factors below when deciding how to proceed.</p>
+</div></div></section>
+
+<section class="block" id="s2-2" data-section="ch2"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Speed and efficiency</h2>
+  <p>The numbers are hard to argue with. According to User Interviews, sourcing 50 B2B participants through ad-hoc recruitment can take roughly 47 times more labor hours than through an owned panel. Across the industry, community-based recruitment is cited as five times faster than ad hoc methods, with some teams receiving answers to UX questions within a single day.</p>
+  <div class="stats">
+    <div class="stat rv"><div class="v">165</div><div class="l">Labor hours to source 50 B2B participants ad hoc</div></div>
+    <div class="stat rv"><div class="v">3.5</div><div class="l">Labor hours for the same 50 from an owned panel</div></div>
+    <div class="stat rv"><div class="v">5x</div><div class="l">Faster recruitment cited for community-based approaches</div></div>
+  </div>
+  <p>The goal most practitioners describe is getting in front of users within a standard one-to-two-week sprint, something that's nearly impossible when sourcing from scratch.</p>
+  <div class="quote"><div class="mark">"</div><div><p class="ctx">Describing the appeal to stakeholders plainly:</p><blockquote>We could put in a few-minute survey on a Friday and then on Monday morning we have all these results and we can analyze it. It's super fast where everything else would take a lot longer.</blockquote><div class="by"><span class="av"></span><span><b>Erin Baron</b>Customer Insights Analyst, utilities</span></div></div></div>
+</div></div></section>
+
+<section class="block" id="s2-3" data-section="ch2"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Self-service and democratization</h2>
+  <p>One of the less-discussed benefits of a functioning panel is what it unlocks for people who aren't researchers. Paired with other ReOps infrastructure like guardrails, templates, and guides, panels allow product managers and engineers to run their own studies without sitting on a research roadmap or waiting for UXR capacity.</p>
+  <div class="quote"><div class="mark">"</div><div><p class="ctx">As Rebecca Okoroji put it:</p><blockquote>There's no way we can run the studies for all of our stakeholders. So what we try to do is enable them to talk to customers or users themselves. The panel was meant to be broad, available, and people can self-serve.</blockquote><div class="by"><span class="av"></span><span><b>Rebecca Okoroji</b>UX Researcher, IT services</span></div></div></div>
+  <div class="case"><div class="tile grainy"><div class="water"></div><span class="label">Case study</span><div class="fig">2,500<small>contacts on a Google Sheet, before migration</small></div></div><div class="body"><h4 class="rv">Jen Cardey</h4><div class="role">Research Operations Manager, travel marketplaces</div><p>Jen inherited a panel living on a Google Sheet: roughly 2,500 contacts, manually managed, and hard to scale. She migrated it into a panel management tool and then launched "Research Lite," a self-service program that opened panel access to engineers, designers, and PMs across the product org.</p><p>For Jen's team, the reaction from stakeholders was immediate: "We can just come to you, get a research turnaround in a couple of weeks. It's so much faster than we ever expected."</p></div></div>
+</div></div></section>
+
+<section class="block" id="s2-4" data-section="ch2"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Quality, depth, and longitudinal potential</h2>
+  <p>Panels can improve more than speed. Recruiting from a known customer base means participants are already familiar with the product, company, or testing process, which reduces onboarding friction and improves the quality of the conversation.</p>
+  <div class="quote"><div class="mark">"</div><div><p class="ctx">On progressive profile building as the core advantage of a panel:</p><blockquote>Deep profiling is the real beauty of panels. I can aggregate all of the information we've ever gotten from this user: their basic screener, what research they've participated in, everything.</blockquote><div class="by"><span class="av"></span><span><b>Tanya Branitska</b>Market Researcher, RT3D development software</span></div></div></div>
+  <p>That means when research calls for feedback from specific segments, such as those with more or less product familiarity or heavy use of a specific feature, she can connect with customers whose experiences and characteristics align with the needs of the study.</p>
+  <p>For teams doing longitudinal work, panels are often the only viable option. One ReOps lead at a bioscience organization manages a participant tracker of clinical specialists, a global population of roughly 200 to 300 people, using year-long consent and automated scheduling to protect a genuinely finite resource. Because their research depends on repeated engagement with the same population over time, maintaining a panel is less a convenience than a necessity.</p>
+  <p>The practices of panel management also lend themselves to small longitudinal cohorts. Rachel Wigen-Toccalino, Staff UXR Program Manager in healthcare, ran six-month engagements with cohorts of 8 to 10 people to track how user experience evolved as products were iterated. Built-in consent forms, processes for mass outreach, and tracking who has participated recently versus who hasn't let her cleanly refresh her group for each study.</p>
+  <div class="case"><div class="tile grainy"><div class="water"></div><span class="label">Case study</span><div class="fig">$0<small>additional cost, using a tool already in contract</small></div></div><div class="body"><h4 class="rv">Arya Guinney</h4><div class="role">Consumer Insights Researcher, national restaurant chain</div><p>Arya built her panel using a tool already included in her organization's existing contract. The motivation was straightforward: previous research was "inherently anonymous." The team had tracked customer sentiment scores but had no way to connect them to actual behavior or follow up with the same customers over time.</p><p>The panel solved for the "why," enabling the team to engage customers longitudinally and capture video reactions to new concepts. "We wouldn't be able to tie that to actual behavior and purchase history before. Now we can stack what someone says against what they've actually done."</p></div></div>
+</div></div></section>
+
+<section class="block" id="s2-5" data-section="ch2"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Cost</h2>
+  <p>DIY recruiting (versus a third-party panel) is often perceived as the budget-friendly choice. But ad hoc recruiting is rarely cheap once you account for labor. User Interviews breaks it down: a mid-career professional earning roughly $73 an hour, manually recruiting 20 B2B participants, costs an estimated $4,831 in labor alone. A panel reduces that to around $870 and saves 63 hours of work.</p>
+  <div class="stats">
+    <div class="stat rv"><div class="v">$4,831</div><div class="l">Labor cost to recruit 20 B2B participants manually</div></div>
+    <div class="stat rv"><div class="v">$870</div><div class="l">The same recruit from an owned panel</div></div>
+    <div class="stat rv"><div class="v">63 hrs</div><div class="l">Saved per 20-participant recruit</div></div>
+    <div class="stat rv"><div class="v">60–90</div><div class="l">Days a vendor procurement process can take</div></div>
+  </div>
+  <p>At scale, the gap widens. For teams recruiting 100 qualitative participants per month, panel-based approaches cost between $5,580 and $16,452 less than ad hoc methods. Beyond labor and time, panels eliminate the procurement drag that makes research irrelevant by the time it's complete. As Prama Ayalasomayajula, UX Researcher for a B2B CRM, noted, traditional vendor procurement can take 60 to 90 days, a timeline that doesn't serve anyone.</p>
+  <div class="case"><div class="tile grainy"><div class="water"></div><span class="label">Case study</span><div class="fig">200<small>ideas tested in six months</small></div></div><div class="body"><h4 class="rv">Ted Kendall</h4><div class="role">Market researcher, agency founder, and online panel pioneer for CPG and packaging</div><p>Ted was running research for a CPG team with a limited annual budget, priced out of the large studies his counterparts were commissioning for upwards of $80,000. By building an internal panel, and making it feel human with consistent communication and a familiar face behind every email, he brought per-survey costs down to roughly $1,200 and cut turnaround from the industry standard of four weeks to eleven days, brief to final report.</p><p>Response rates hit 50 to 75 percent, largely because Ted consistently closed the loop: participants could see exactly how their input changed the product.</p></div></div>
+</div></div></section>
+
+<section class="block" id="s2-6" data-section="ch2"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Diversity and hard-to-reach audiences</h2>
+  <p>Ideally, panels give researchers deliberate control over whose voices they hear. Rather than relying on whoever responds to a generic recruitment post, panel managers can intentionally recruit underrepresented groups, target by behavior or geography, and avoid over-indexing on the loudest or most engaged voices. For niche professional audiences such as developers, C-suite executives, or clinical specialists, a pre-vetted panel can be especially valuable.</p>
+  <div class="case"><div class="tile grainy"><div class="water"></div><span class="label">Case study</span><div class="fig">2–3 yrs<small>to reach a scale that reflected the region</small></div></div><div class="body"><h4 class="rv">Katie Encabo</h4><div class="role">Client Success Manager, market and UX research consulting</div><p>Katie managed the build-out of an opt-in research panel for a regional government initiative operating across multiple counties. Their goal wasn't speed or cost savings, it was representation. "Their purpose was inclusivity and giving constituents an opportunity to participate in government decisions."</p><p>The panel was designed to be as open and accessible as possible: local events, intercept surveys at venues like the zoo, grassroots outreach including billboards and table tents. The value proposition wasn't cash, it was civic voice. The panel took two to three years to reach a scale where the data could be trusted, but the payoff was a platform that made representation a structural feature of the research process, not an afterthought.</p></div></div>
+</div></div></section>
+
+<section class="block" id="s2-7" data-section="ch2"><div class="wrap"><div class="col">
+  <h2 class="sec rv">PII, compliance, and legal drivers</h2>
+  <p>For many researchers, a panel isn't just operationally useful. It can also provide structure for managing consent and participant data responsibly. Spreadsheets become difficult to manage as requirements around opt-outs, consent records, deletion requests, and participant data grow more complex. In regulated industries, the risk of non-compliance is a direct cost.</p>
+  <div class="quote blue"><div class="mark">"</div><div><p class="ctx">Making the case for her panel tool by pointing to the financial risk of non-compliance:</p><blockquote>Spending a little money on a proper tool now saves a ton compared to regulatory scrutiny later.</blockquote><div class="by"><span class="av"></span><span><b>Emily Wever</b>Senior Research Operations Specialist</span></div></div></div>
+  <p>In B2B environments, formal opt-in panels can also provide clearer processes for documenting consent and establishing how and when researchers are permitted to contact users.</p>
+  <div class="case"><div class="tile grainy"><div class="water"></div><span class="label">Case study</span><div class="fig">4<small>contacts per person per year, enforced by the tool</small></div></div><div class="body"><h4 class="rv">Shri Amarnath</h4><div class="role">Senior UX Research Ops Specialist, software company handling payroll and benefits</div><p>Shri collaborated with legal from the very beginning to establish formalized terms and conditions for their branded panel, the Dayforce Research Group. Because their data processing agreements strictly limited direct contact with certain end users, these early conversations established clear guardrails for what they could and couldn't do. The legal team mandated that no individual be contacted more than four times a year, a rule Shri programmed into their panel tool (Ethnio) to automate compliance.</p><p>"Those initial conversations that we had with the legal team to establish formalized terms and conditions really helped us set up guardrails."</p></div></div>
+</div></div></section>
+
+<section class="block" id="s2-8" data-section="ch2"><div class="wrap"><div class="col">
+  <h2 class="sec rv">When not to build a panel</h2>
+  <p>Panels aren't the right answer for every organization. Several practitioners were direct about the conditions that make them a poor fit: no existing customer base, or research demand too low to justify the investment.</p>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card green"><h4>"If people don't even value ResearchOps, that's a very, very hard start."</h4><div class="who">Benson Low, ResearchOps community board member</div></div>
+    <div class="card green"><h4>"Owning is an expense. If this isn't your forte, is it worth making it your forte? Can you keep it going for more than six months?"</h4><div class="who">Douglas Wicks, Senior Research Manager and Consultant</div></div>
+  </div></div>
+  <div class="col">
+  <p>The failure mode most often described isn't a bad launch, it's a quiet fade: a panel that gets built, has a short run of success, then goes silent and loses members before it ever proves its sustained value.</p>
+  <h3 class="rv">When to choose which strategy</h3>
+  <div class="callout"><h4 class="rv">Build if</h4><p>You have the operational capacity to manage the database, and either conduct frequent, iterative research with your own customer base or need consistent access to specific audiences (like your competitors' customers or niche power users).</p></div>
+  <div class="callout amber"><h4 class="rv">Buy if</h4><p>You have one-off research needs, lack sufficient staffing to operate the panel, lack the processes to adequately handle customer data, or need to reach a broad, representative consumer base outside your current ecosystem.</p></div>
+  </div>
+</div></section>
+
+<section class="block" id="s2-9" data-section="ch2"><div class="wrap">
+  <div class="col"><h2 class="sec rv">Build vs. buy</h2><p>Standing up an in-house participant panel, or outsourcing recruitment. Where each path pays off, at a glance.</p></div>
+  <div class="bvb">
+    <div class="lab"></div><div class="build h"><small>Internal</small>Build your own panel</div><div class="buy h"><small>Outsourced</small>Buy recruitment</div>
+    <div class="lab">Setup and turnaround</div><div class="build"><b>3–4 months to build</b><span>Then rapid to run once it exists.</span></div><div class="buy"><b>Live immediately</b><span>Each study still hinges on recruitment feasibility.</span></div>
+    <div class="lab">Recurring cost</div><div class="build"><b>Low</b><span>Incentives and tooling only.</span></div><div class="buy"><b>High</b><span>Per-participant fees, every study.</span></div>
+    <div class="lab">Participant quality</div><div class="build"><b>High</b><span>Verified users, vested in the brand.</span></div><div class="buy"><b>Variable</b><span>Risk of bots, fraud, and gaming.</span></div>
+    <div class="lab">Audience reach</div><div class="build"><b>Narrow</b><span>Limited to existing customers and leads.</span></div><div class="buy"><b>Broad</b><span>Gen-pop and competitors' users.</span></div>
+    <div class="lab">Control</div><div class="build"><b>Full</b><span>You own the profiles and the sourcing.</span></div><div class="buy"><b>Limited</b><span>Little say over where people come from.</span></div>
+    <div class="lab">Operational effort</div><div class="build"><b>Heavy</b><span>Intensive, manual upkeep.</span></div><div class="buy"><b>Light</b><span>Offloaded to the vendor.</span></div>
+    <div class="lab">Compliance</div><div class="build"><b>You carry it</b><span>Own all PII and security. Total control, internal burden.</span></div><div class="buy"><b>Vendor carries it</b><span>Most liability shifts, but you depend on their DPA and terms.</span></div>
+    <div class="foot"><b>The pattern.</b> Build trades time and effort up front for quality, control, and lower cost at scale. Buy trades cost and control for speed and far wider reach.</div>
+  </div>
+  <div class="col"><p>While the decision to build is a single moment, a good setup can assure the panel earns its keep for years. In the next piece, we'll walk through how to set up a panel built to last: the stakeholders to involve early, the tooling decisions to make, the recruitment criteria worth capturing on day one, and where to find your first participants.</p></div>
+</div></section>
+<!-- ================= CHAPTER 3 ================= -->
+<section class="opener" id="ch3" data-chapter>
+  <div class="big rv">3</div>
+  <p class="kicker">Part three</p><div class="inner rv"><h2 class="rv">Setting up your research panel.</h2></div>
+</section>
+
+<section class="block" id="s3-1" data-section="ch3"><div class="wrap"><div class="col">
+  <h2 class="sec rv">A panel is a lifecycle, not a thing</h2>
+  <p class="lead">A participant panel is easy to picture as a thing: a tool, a list, or a group of people who answer your surveys. It's more useful to picture it as a lifecycle. Where you are in that lifecycle determines what you should be working on right now.</p>
+  <p>We think of setup in four phases.</p>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card green"><h4>Decide</h4><p>Do you need a panel at all, and does it make more sense to build one or buy access? That's the ground <a href="#ch2" style="color:inherit">part two</a> covers.</p></div>
+    <div class="card brown"><h4>Advocate</h4><p>Make the case. Secure the mandate, the budget, and the leadership support needed to launch a panel.</p></div>
+    <div class="card terra"><h4>Set up</h4><p>Turn approval into a working panel: the right stakeholders at the table, the right tooling for your scale, clear recruitment criteria, and your first participants.</p></div>
+    <div class="card violet"><h4>Sustain</h4><p>Keep the panel healthy so it keeps delivering value year after year instead of quietly fading. That's <a href="#ch4" style="color:inherit">part four</a>.</p></div>
+  </div></div>
+  <div class="col">
+  <p>This article focuses on the third phase. It picks up where the previous article leaves off: you have approval, resources, and a mandate. Now it's time to set up the panel you were funded to create.</p>
+  <p>Stakeholders appear in both the advocacy and setup phases, which can make it seem like we're covering the same ground twice. We're not. Advocacy is about persuasion: convincing leadership that a panel is worth funding. Setup is about execution: coordinating with legal on consent and governance, with sales and customer success to protect client relationships, and with marketing to ensure your first recruitment campaign doesn't collide with a major launch.</p>
+  <p>No, advocacy doesn't end the moment the budget clears. You'll keep re-earning buy-in long after. But you have to start building somewhere. This is where.</p>
+  </div>
+</div></section>
+
+<section class="block" id="s3-2" data-section="ch3"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Who to involve before you build anything</h2>
+  <p>Setting up a participant panel is not a solo project. The practitioners who have done it well are consistent on this point: the biggest mistakes happen when someone tries to build in isolation and ends up asking for favors rather than collaborating on a shared resource.</p>
+  <p>Getting the right people involved early, and being clear about what you need from each, is as much a part of setup as choosing your tool or writing your first recruitment email. A RACI framework maps this cleanly.</p>
+  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Role</th><th>Who</th><th>What they own</th></tr></thead><tbody>
+    <tr><td>Responsible</td><td>ReOps lead; researchers on small teams</td><td>Day-to-day build: tooling, recruitment, communications, tracking</td></tr>
+    <tr><td>Accountable</td><td>Director of Research, Head of Insights</td><td>Budget, mandate, final sign-off on strategy</td></tr>
+    <tr><td>Consulted</td><td>Legal, IT, Marketing/CRM, Sales/CSMs, Finance</td><td>Permissions, compliance, coordination, incentive logistics</td></tr>
+    <tr><td>Informed</td><td>PMs, designers, customer support, account management</td><td>That the panel exists, how to access it, what it can produce</td></tr>
+  </tbody></table></div>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card green"><h4>Research Operations and researchers</h4><p>In mature organizations, a ReOps lead owns the infrastructure build: tool selection, recruitment workflows, incentive administration, communication templates. In smaller teams, a researcher may carry it alone. Either way, someone must be explicitly accountable before a single recruitment email goes out.</p></div>
+    <div class="card brown"><h4>Content design</h4><p>If your organization has content designers, involve them early. The voice and tone of recruitment emails, landing pages, consent language, and participant communications shape expectations from the very first interaction.</p></div>
+    <div class="card terra"><h4>Management</h4><p>Someone with organizational authority needs to champion the effort. Without executive support, budget approvals become "pulling teeth" and every cross-functional request turns into a negotiation. Secure buy-in before you need it.</p></div>
+    <div class="card violet"><h4>Legal and compliance</h4><p>Not because they slow things down, but because the guardrails they establish shape everything from consent and data retention to PII handling. "It was helpful to know what not to do in order to know what we should do starting out."</p></div>
+    <div class="card sky"><h4>Marketing and CRM</h4><p>Easy to overlook until you've scheduled a recruitment campaign that conflicts with a product launch. Partner early to coordinate communications, avoid customer fatigue, and gain access to existing CRM expertise and channels.</p></div>
+    <div class="card green"><h4>Product, design, and customer support</h4><p>They don't need to help build the panel, but they need to understand what it is and how to use it. Support teams are often the first to hear from participants checking whether a recruitment email is legitimate. A simple internal briefing prevents confusion.</p></div>
+    <div class="card brown"><h4>Sales and customer success</h4><p>In B2B, they own the customer relationship and can either facilitate access or effectively block it. Involve them early so they understand how participants will be approached, what safeguards are in place, and how the panel benefits both customers and the business.</p></div>
+  </div></div>
+  <div class="col">
+  <div class="case"><div class="tile grainy"><div class="water"></div><span class="label">Case study</span><div class="fig">Pivot<small>from gatekeeper to partner, halfway through</small></div></div><div class="body"><h4 class="rv">Orrin Ward</h4><div class="role">Design and ReOps Lead, FinTech</div><p>Orrin's team was launching their panel when they realized they had underestimated how protective the sales team would be of customer access. Researchers found themselves repeatedly blocked from contacting users directly.</p><p>"We pivoted halfway through and realized we needed to build a better relationship with commercial, build trust with them so that we don't have to keep fighting to be able to talk to our users." The team restructured to include Sales and Customer Success as partners in customer communications about the panel, not gatekeepers to route around. Response rates improved. So did the internal reputation of the research function.</p></div></div>
+  </div>
+</div></section>
+
+<section class="block" id="s3-3" data-section="ch3"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Choosing your tooling: spreadsheet, existing CRM, or dedicated platform?</h2>
+  <p>The tooling question is a balancing act. Invest too early and you risk buying capabilities you don't yet need. Invest too late and you'll spend valuable time managing logistics manually that even basic tooling could have automated. Your organizational context matters a lot: is there more time or money easily available? Is it easy or hard to get new vendors through procurement? Does leadership feel that having their own toolset signals importance internally? If you end up with a long-running panel, conditions will change, so monitor for the point where it's time to make the case for a different kind of system support.</p>
+  <h3 class="rv">The home-grown method</h3>
+  <p>Many of the professionals we talked to have used a spreadsheet at some point. For some specialist populations, spreadsheets are sufficient altogether. One ReOps lead manages a panel of 200 to 300 clinical scientists on a spreadsheet. At that scale, with that population, a dedicated tool would add overhead without adding value. The spreadsheet is the panel.</p>
+  <h3 class="rv">Spreadsheet as proof of concept</h3>
+  <p>The scrappy tool that gets you going can be the prototype that leads to better things. The most common pattern we heard was spreadsheet-as-proof-of-concept: starting lean to demonstrate the utility of an always-on panel before advocating for tooling investment.</p>
+  <p>There's generally a natural tipping point. Once you're managing more than a few hundred contacts, tracking who's been contacted, who's been paid, and who's been over-used becomes a job in itself.</p>
+  <div class="case"><div class="tile grainy"><div class="water"></div><span class="label">Case study</span><div class="fig">2,500<small>contacts: the point where the pain forced a switch</small></div></div><div class="body"><h4 class="rv">Jen Cardey</h4><div class="role">Research Operations Manager, travel and hospitality platform</div><p>Jen made the switch at around 2,500 contacts, after managing her panel in a spreadsheet for years. The decision to migrate wasn't driven by ambition; it was driven by pain. Tracking participation, managing incentives, and maintaining data hygiene had become unsustainable.</p><p>She moved to a panel management platform, built a second B2C panel alongside the original, and launched "Research Lite," a self-service program for engineers, designers, and PMs. The shift didn't just solve the logistics problem. It changed what the panel was capable of.</p></div></div>
+  <h3 class="rv">Signs it's time to invest in dedicated tooling</h3>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card green"><h4>You're over-using the same people</h4><p>With no automated way to track participation frequency, your most responsive panelists quietly become overrepresented in your studies.</p></div>
+    <div class="card brown"><h4>You're burning out the ones who respond</h4><p>Too many invitations lead to survey fatigue, causing even engaged participants to disengage or leave entirely.</p></div>
+    <div class="card terra"><h4>Compliance risk is too high</h4><p>Managing opt-outs, consent records, or PII in a shared spreadsheet may be too risky for your industry or location.</p></div>
+    <div class="card violet"><h4>Recruitment is blocking research</h4><p>If scheduling, incentives, and reminders take more time than the research itself, automation is no longer a luxury. It's the path back to doing the work.</p></div>
+  </div></div>
+  <div class="col">
+  <h3 class="rv">Using the existing CRM</h3>
+  <p>Not every organization jumps directly from spreadsheets to a dedicated platform. For teams that already have a customer database or CRM, the next logical step may be to leverage that infrastructure first. The CRM already contains customer profiles, contact histories, segmentation data, and communication workflows. It wasn't designed for research operations, but it can often support the early stages of panel management and bridge the gap between a spreadsheet and a dedicated platform.</p>
+  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Advantages</th><th>Disadvantages</th></tr></thead><tbody>
+    <tr><td>Less duplication of PII. Customer data already in the CRM reduces the need to govern a separate participant database.</td><td>You're a small fish in a big pond. It's hard to get features or changes when the system is optimized for larger, better-funded parts of the organization.</td></tr>
+    <tr><td>No new vendor. Vendor selection, procurement, and onboarding can be lengthy. The CRM is already in place.</td><td>Keeping a bright line between research and marketing. For anti-spam compliance, participant trust, and expectation management, clear separation helps.</td></tr>
+    <tr><td>Leverages existing investments. You're getting more value from technology the organization already owns and supports.</td><td>Systems can be complex. Without dedicated support or customization, CRMs can be difficult to learn, navigate, and adapt to research needs.</td></tr>
+  </tbody></table></div>
+  <h3 class="rv">Specialized panel management systems</h3>
+  <p>For other teams, the risks and downsides of the spreadsheet convinced them to invest in tooling early. To understand if your context calls for specialized tooling, evaluate these upsides.</p>
+  <ul class="plain">
+    <li><b>Better coordination with your Sales or Marketing CRM.</b> Spreadsheets don't talk to your CRM, which means you might inadvertently send a survey invite to a customer mid-contract-renewal.</li>
+    <li><b>Tooling can enforce a cooldown period.</b> With manual management, enthusiastic participants end up dominating your pool. Most panel systems have cooldowns to prevent over-engaging participants.</li>
+    <li><b>Designed with compliance in mind.</b> Right-to-be-forgotten requests and PII protection stay invisible until legal gets involved. Dedicated platforms make consent, deletion, and PII management easier to administer consistently.</li>
+  </ul>
+  <p>Whether you choose a spreadsheet, an existing CRM, or a dedicated platform, the technology is ultimately a supporting decision. The bigger determinant of success is whether your panel contains the participants you'll need six months from now, not just the participants who are easiest to recruit today.</p>
+  </div>
+</div></section>
+
+<section class="block" id="s3-4" data-section="ch3"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Build your panel success criteria</h2>
+  <p>Before the first recruitment email goes out, you need a clear answer to a question most teams skip: who, exactly, is this panel for? Teams that skip this step build panels that work for the first few studies and quietly fail when a stakeholder needs a segment that was never recruited for.</p>
+  <h3 class="rv">Start with your research agenda</h3>
+  <p>The most common mistake in panel planning is starting with whoever is easiest to reach and working backward to justify the composition. Consider a 12-month snapshot of the research you expect to run. Sketch enough of a picture to ask: what segments will we need to hear from, and how often? That question surfaces your panel's size and segment requirements faster than any tool selection or recruitment channel decision will.</p>
+  <p>A team running monthly pulse surveys needs a panel large enough to sustain repeated outreach without burning participants out. A team doing longitudinal qualitative work may only need eight to ten deeply engaged people.</p>
+  <div class="case"><div class="tile grainy"><div class="water"></div><span class="label">Case study</span><div class="fig">31<small>members at peak. Judged a failure, but not for size</small></div></div><div class="body"><h4 class="rv">Joanne Van Vranken</h4><div class="role">Research Operations Manager, accounting software</div><p>Joanne had a B2B panel that peaked at 31 members and was ultimately judged a failure. Not because 31 is inherently too small, but because the organization needed statistical analysis and the panel couldn't support it. The failure wasn't in the recruitment. It was in the mismatch between what the panel was built for and what it was eventually asked to do.</p></div></div>
+</div></div></section>
+
+<section class="block" id="s3-5" data-section="ch3"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Define your segments</h2>
+  <p>One of the beauties of having your own panel is being able to talk to specific subsets of users based on your research needs. To do that, the panel needs relevant data to understand who is available. But keeping the initial sign-up form short means being selective about what you ask up front versus what you collect through profiling surveys over time. Our experts were opinionated on what to capture on day one.</p>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card green"><h4>B2B: role, seniority, company size, industry, tier</h4><p>Typically non-negotiable. Agustina Di Clemente aligned her segments directly with quarterly research priorities, including market size, company size, and user behavior, and reviewed them each quarter as priorities shifted.</p><div class="who">Agustina Di Clemente, Research Operations Specialist, B2B travel and spend management software</div></div>
+    <div class="card brown"><h4>Government: geography and demographics</h4><p>Arun Upadhyay built quotas into his panel from launch, matching census data for age and gender so results could be trusted to reflect the actual population.</p><div class="who">Arun Upadhyay, Research Ops Specialist, market research</div></div>
+    <div class="card terra"><h4>B2C: tenure and product use</h4><p>Power users often need to be studied separately from recently onboarded users.</p></div>
+    <div class="card violet"><h4>Everyone: participation metadata</h4><p>Date of last contact, study participation history, and notes about past contributions. Skip this and you risk re-screening people you've already spoken with, or repeatedly drawing on your most enthusiastic respondents without realizing it.</p></div>
+  </div></div>
+  <div class="col">
+  <div class="quote"><div class="mark">"</div><div><p class="ctx">Tanya Branitska, who built a developer panel, on what to ask first:</p><blockquote>The number one question was, what's their subscription tier? What do they do? Because the research often is dependent on that section of the business.</blockquote><div class="by"><span class="av"></span><span><b>Tanya Branitska</b>Market Researcher, HR software</span></div></div></div>
+  </div>
+  <div class="col">
+  <h3 class="rv">What practitioners wish they'd tracked earlier</h3>
+  <p>The most consistent regret across practitioners was what they hadn't captured about participants early on.</p>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card cream"><h4>Recruitment source</h4><p>Karen Bills wished she'd tagged every participant with their original source. As satellite communities merged into the main panel, she lost the ability to distinguish "gen pop" from "premium" participants. "Design for the next ask, not just the immediate need."</p></div>
+    <div class="card cream"><h4>Incentive preference</h4><p>Arya Guinney built an incentive preference question into her screener from the start and called it one of her best early decisions. Knowing whether participants wanted branded gift cards or neutral rewards stretched the budget while supporting response rates.</p></div>
+    <div class="card cream"><h4>Behavioral personas over job titles</h4><p>"IT Admin" and "Marketer" mean different things at different companies. Teams that captured capabilities and tasks, what people actually do day to day, found those more durable for targeting than titles.</p></div>
+    <div class="card cream"><h4>Verification signals</h4><p>With AI-generated survey responses creating new quality concerns, several practitioners wished they'd collected LinkedIn URLs or other verification markers at sign-up. It's much harder retroactively.</p></div>
+    <div class="card cream"><h4>Account health in B2B</h4><p>Integrating CRM data early, or at minimum flagging participants by relationship status, prevents sending a research invitation to a customer in a tense contract renewal. It doesn't feel urgent until it suddenly is.</p></div>
+  </div></div>
+</div></section>
+
+<section class="block" id="s3-6" data-section="ch3"><div class="wrap"><div class="col">
+  <h2 class="sec rv">How big does my panel need to be?</h2>
+  <p>We are often asked how large a panel needs to be to become successful, or even "worth it." What we learned is that panel size is better treated as a calculation than a target. A basic starting point:</p>
+  <div class="formula">
+    <div class="f">( <span>Desired responses per study</span> ÷ <span>Expected response rate</span> ) × <span>Studies per month</span><br>+ 10–20% buffer for attrition and non-response</div>
+    <div class="ex">If you need 20 completed responses per study, expect a 40% response rate, and plan four studies a month, you need 50 participants per study, or 200 across the month. Add a 15% buffer and your estimate is about 230 participants.</div>
+  </div>
+  <p>This is a starting estimate. Your actual needs will vary based on how often participants can take part, how narrowly studies are targeted, and how much participant overlap exists between studies. Modelling panel size can get as elaborate as you want. But size isn't everything.</p>
+  <div class="quote"><div class="mark">"</div><div><p class="ctx">Engagement beats scale.</p><blockquote>It doesn't tell me any story if I just tell you that I have a panel of 10k users if they're not engaged. If I have a 1k panel with very engaged people, that will give you better performance.</blockquote><div class="by"><span class="av"></span><span><b>Agustina Di Clemente</b>Research Operations Specialist, B2B travel and spend management software</span></div></div></div>
+  <p><b>Manageability sets a real ceiling.</b> A panel is only as useful as your ability to manage it. The right size is one your team can recruit, maintain, segment, communicate with, and learn from consistently.</p>
+  <div class="prompt"><h4 class="rv">Try it: use AI to build a panel size calculator</h4><p>Use this prompt with an AI coding tool to explore how panel size, response rates, research demand, and participation limits interact.</p>
+  <p style="margin-top:14px">Create a single-file, local-only HTML web app for simulating participant panel size. Include two primary modes:</p>
+  <ul><li><b>Panel capacity:</b> the user enters an existing panel size and sees what combination of studies the panel can support.</li><li><b>Panel planning:</b> the user defines the studies they want to run and receives an estimate of the panel size required.</li></ul>
+  <p>Allow users to enter study types, desired completes per study, expected response rates, studies per month, participant eligibility rates, maximum participation frequency, attrition rates, and a planning buffer. Show the calculations and assumptions clearly, flag combinations that could overuse participants, and allow users to adjust inputs to compare scenarios. Keep all data and processing local to the browser.</p></div>
+</div></div></section>
+
+<section class="block" id="s3-7" data-section="ch3"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Start recruiting</h2>
+  <p>Once your team is bought in, your tooling selected, and the recruitment criteria identified, it's time to recruit your panelists. The advice from practitioners was consistent: cold outreach to unfamiliar audiences should be a last resort, not a starting point. Begin with the warm channels already available to you.</p>
+  <h3 class="rv">Start with warm channels</h3>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card green"><h4>Internal CRM databases</h4><p>Consistently cited as the strongest first wave. Jen Cardey tapped her existing customer database and reached 7,000 sign-ups within one to two months. The advantage isn't just reach, but relevance.</p></div>
+    <div class="card brown"><h4>Past research participants</h4><p>Agustina found that re-engaging people who had participated over the previous three years was "one of the initiatives that performed really well." These are people who have already said yes to research once.</p></div>
+    <div class="card terra"><h4>Marketing and product touchpoints</h4><p>In-product recruitment, customer communications, and email updates put the invitation in front of people who already have some connection to the product or brand.</p></div>
+  </div></div>
+  <div class="col">
+  <div class="stats">
+    <div class="stat rv"><div class="v">7,000</div><div class="l">Sign-ups in one to two months from an internal CRM</div></div>
+    <div class="stat rv"><div class="v">70%</div><div class="l">Of responses within an hour, using Slack plus email</div></div>
+  </div>
+  <p>Across accounts, warm channels offered compelling examples of both speed and quality. One team using Slack and email received 70 percent of its responses within an hour. Others found that people recruited through warm channels provided richer feedback, in part because they were invested in improving tools they already used.</p>
+  <h3 class="rv">Avoid generic lists</h3>
+  <p>An existing list isn't necessarily the right list. Avinash Mangar discovered this managing a WWE panel, where merchandise purchaser lists included parents and relatives buying gifts, not necessarily the engaged fans the research needed. "Reaching out through our engaged CRM base was much better." Availability is no substitute for relevance.</p>
+  <h3 class="rv">Consider niche communities</h3>
+  <p>When standard channels fall short, consider where specialized populations already gather and how their qualifications can be verified.</p>
+  <div class="case"><div class="tile grainy"><div class="water"></div><span class="label">Case study</span><div class="fig">Licensed<small>against state records, by hand</small></div></div><div class="body"><h4 class="rv">Douglas Wicks</h4><div class="role">Senior Research Manager and Consultant across health, telecom, and financial services</div><p>Douglas needed licensed hairstylists for a study, a population consumer panels couldn't reliably deliver. Initial panel responses were "bogus" and required extensive sifting. His solution: purchase a specialized trade magazine subscriber list, then validate participants against state licensing records. The list was expensive. The validation was manual. But it gave him the qualified population he needed, and the resulting panel became a resource for future studies with the same audience.</p></div></div>
+  <h3 class="rv">Reach skeptical audiences in person</h3>
+  <p>For audiences skeptical of research, such as fraud investigators, clinical specialists, and regulated professionals, personal credibility can matter more than another recruitment email. Jess Ivins, Senior UX Researcher in enterprise software, found that cold emails to customers produced "crickets."</p>
+  <div class="quote dark"><div class="mark">"</div><div><p class="ctx">What worked was going on-site, meeting people face to face, and letting them see who was asking and why.</p><blockquote>I realized I have to go on-site and build face-to-face relationships with these customers so they know who I am.</blockquote><div class="by"><span class="av"></span><span><b>Jess Ivins</b>Senior UX Researcher, enterprise software</span></div></div></div>
+  <h3 class="rv">Get creative for harder-to-find audiences</h3>
+  <p>For hard-to-reach demographics, traditional channels may be tough. Joe Jordan, President of Elliam, Inc., described one company that built a panel of teenagers ages 14 to 17 whose parents had already provided standing consent, making it easier to recruit from that population for future studies.</p>
+  <p>The through-line is simple: recruit with the audience in mind. That might mean working through an account manager, recruiting at a conference booth, partnering with a community organization, or relying on peer referrals. For hard-to-reach populations, the best path may look very different from the broad outreach that works elsewhere.</p>
+  <p>Building a panel is relatively easy. Building one that remains useful and engaged over time is harder. There are too many contextual factors for any single formula to guarantee success. But practitioners pointed to a consistent set of principles: work iteratively, find your allies and sponsors, address objections early, and understand what your organization needs today while planning for what it needs tomorrow.</p>
+  </div>
+</div></section>
+
+<section class="block" id="s3-8" data-section="ch3"><div class="wrap"><div class="col">
+  <h2 class="sec rv">What to do after setup</h2>
+  <p>Contacting that first wave of participants is a major milestone, but don't mistake it for the finish line.</p>
+  <p class="lead">The failure mode for panels is rarely a bad launch. It's the quiet fade: the panel that opens with fanfare, runs well for a quarter or two, then slowly goes silent as participants churn, profiles go stale, and the people who championed it move on. A panel isn't a project you finish. It's a resource you keep alive.</p>
+  <p>That's where the next phase begins. In part four, we look at what it takes to keep participants engaged, profiles current, and your panel valuable long after the initial excitement of launch has faded.</p>
+</div></div></section>
+<!-- ================= CHAPTER 4 ================= -->
+<section class="opener" id="ch4" data-chapter>
+  <div class="big rv">4</div><div class="tile l grainy"></div><div class="tile r grainy"></div>
+  <p class="kicker">Part four</p><div class="inner rv"><h2 class="rv">Managing and maintaining a healthy panel.</h2></div>
+</section>
+
+<section class="block" id="s4-0" data-section="ch4"><div class="wrap"><div class="col">
+  <p class="lead">Getting a panel started isn't easy, so if you've successfully set one up, congratulations and respect are in order. But keeping it healthy over time is a different kind of challenge.</p>
+  <p>Panels aren't Twinkies or forever chemicals. They are subject to entropy, and they require energy to keep functioning. The enthusiasm and collaboration that fueled the launch can fade as the reality of ongoing maintenance sets in.</p>
+  <p>This article looks at how practitioners keep their panels healthy without losing momentum: keeping participants engaged without burning them out, handling participant data responsibly, improving representation, and managing the ongoing work sustainably.</p>
+</div></div></section>
+
+<section class="block" id="s4-1" data-section="ch4"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Keep participants engaged</h2>
+  <p>Sustaining engagement means treating the panel not as a static database but as an ongoing relationship that requires care and feeding. When participants feel their time is being wasted or their voices aren't being heard, they quickly disengage or stop responding.</p>
+  <h3 class="rv">Humanize the panel to build rapport</h3>
+  <p>Rachel Wigen-Toccalino worked with a team in healthcare, where showing care for participants was paramount. Her team provided a high-touch onboarding experience with an orientation and a clear schedule of weekly communications.</p>
+  <p>Ted Kendall kept engagement high by putting a human face on the panel. His wife served as the dedicated face of the program, handling communications and signing off with her name. The connection grew strong enough that participants would email her to say they were going on vacation and couldn't take a survey.</p>
+  <div class="quote"><div class="mark">"</div><div><blockquote>Part of the success of the panel was that personal rapport. It was a real person. It wasn't just Kraft. The participants felt important, and they felt like their feedback was being listened to.</blockquote><div class="by"><span class="av"></span><span><b>Ted Kendall</b>Market Researcher, CPG and packaging</span></div></div></div>
+  <div class="callout"><h4 class="rv">Thriving panels put a face to the name</h4><p>Among teams that met User Interviews' success threshold of 100+ sessions, 90.3% had set up a custom sender profile (versus 76.5% of other teams), 56.0% used a logo (versus 23.5%), and 76.1% used a custom theme (versus 64.7%).</p></div>
+  <h3 class="rv">More ways practitioners keep the relationship warm</h3>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card green"><h4>Close the loop with sharebacks</h4><p>Tanya Branitska uses polls that display results immediately: "instant gratification." Arya Guinney runs larger sharebacks showing participants how their input influenced the menu, reinforcing their connection to the brand.</p></div>
+    <div class="card brown"><h4>Provide non-research value</h4><p>Joanne Van Vranken noticed some segments of her tradespeople panel weren't called on often. She began sending quarterly newsletters with fun, non-business polls simply to say, "We haven't forgotten that you're here!"</p></div>
+    <div class="card terra"><h4>Align incentives with what people value</h4><p>Prama Ayalasomayajula found that giving B2B advertising professionals direct access to the people building the product was more motivating than money. Marta Paz's restaurant owners want early access: "That they will be able to test first all the main features that come out is their main incentive."</p></div>
+  </div></div>
+</div></section>
+
+<section class="block" id="s4-2" data-section="ch4"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Avoid participant burnout</h2>
+  <p>Keeping panelists active is the lifeblood of a healthy panel. Practitioners described several ways to prevent burnout, from managing contact frequency to reducing the burden of individual studies.</p>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card green"><h4>Enforce cooldowns and rotations</h4><p>Jess Ivins uses her panel software's built-in tools: "We avoid that problem of asking the same people over and over again with an automatic ninety-day cooldown." Avinash Mangar's team surveyed fans up to four times a week, so they rotated who received each invitation.</p></div>
+    <div class="card brown"><h4>Keep surveys short, cut tedious formats</h4><p>Arun Upadhyay sets a 20-minute limit on online interviews for his government panel: "Otherwise it is way boring for them." Ted Kendall eliminated grid questions entirely: "We got a ten percent drop-off with the grid."</p></div>
+    <div class="card terra"><h4>Use progressive profiling</h4><p>Katie Encabo found that appending the same demographic questions to every survey added to the burden. Retain profile information so people "don't have to refill that information every time."</p></div>
+    <div class="card violet"><h4>Target invitations precisely</h4><p>Karen Bills heard from participants repeatedly invited to studies that didn't fit: "I'm a marketer, but I'm not related to campaigns." Understand your audience and target the invites accordingly.</p></div>
+  </div></div>
+</div></section>
+
+<section class="block" id="s4-3" data-section="ch4"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Avoid consent drift with careful data handling</h2>
+  <p>While burnout risks losing engagement over time, consent violations and poor data handling can put the panel itself at risk. Interviewees cautioned against consent drift, where changes, merges, or transfers between systems result in people being added to outreach they didn't consent to. Over time, that leads to poor data hygiene, accidental over-contacting, or outright violations.</p>
+  <h3 class="rv">Purge non-consenting users from data merges</h3>
+  <p>Consent problems can emerge inadvertently when new data sources are connected. Jess Ivins experienced this when her data team synced its Snowflake database directly to the panel tool, RallyCRM. The integration risked pulling thousands of users into the panel without the required consent. Jess now purges non-consenting users from the platform to maintain panel integrity.</p>
+  <h3 class="rv">Keep consent updated by inheriting opt-out rules</h3>
+  <p>Compliance isn't just about initial sign-up. It requires maintaining accurate consent and preference records over time, including when participants opt out or request deletion. Tanya Branitska suggests an automated opt-out inheritance workflow: "Set up an automated link between the panel and your native software to have that process automated."</p>
+  <div class="case"><div class="tile grainy"><div class="water"></div><span class="label">Case study</span><div class="fig">Two lists<small>marketing and research, kept deliberately separate</small></div></div><div class="body"><h4 class="rv">Arya Guinney</h4><div class="role">Consumer Insights Researcher, national restaurant chain</div><p>Arya recognized that her company had separate marketing and research lists, and an opt-out in one system wasn't automatically reflected in the other. She addressed this through clear communication, ensuring participants understood exactly what they were signing up for and how different communication types were treated.</p><p>"I want to be clear from a legal perspective, but also from a user experience perspective, that these are separate things and you can rescind your opt-in at any time."</p></div></div>
+</div></div></section>
+
+<section class="block" id="s4-4" data-section="ch4"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Increase and maintain healthy representation</h2>
+  <p>A panel that skews toward your easiest, most enthusiastic respondents will quietly tell you a distorted story. The people who respond most readily may not reflect the full range of people you need to hear from, and that imbalance grows over time. Practitioners pointed to two habits.</p>
+  <h3 class="rv">Treat multicultural audiences as distinct groups, not monoliths</h3>
+  <p>Avinash Mangar emphasized recognizing differences within ethnic and regional populations rather than treating them as homogeneous. "You can't treat certain ethnic or regional groups like monoliths, expecting their behaviors and preferences to be the same." In international research, he also adapts language and localization to engage different audiences.</p>
+  <h3 class="rv">Oversample or continuously recruit underrepresented populations</h3>
+  <p>The diversity you recruit for at launch doesn't stay put. Smaller segments become underrepresented as participants leave, while the people who remain change. A participant's role, life stage, or relationship with your product can shift enough that they no longer represent the segment you recruited them for.</p>
+  <div class="quote"><div class="mark">"</div><div><p class="ctx">Someone who was a "career starter" two years ago may no longer fit that segment.</p><blockquote>Two years later, they're not the same person anymore. And we need to backfill to make sure we still have that audience represented.</blockquote><div class="by"><span class="av"></span><span><b>Karen Bills</b>Research Ops Specialist, marketplaces and social media platforms</span></div></div></div>
+</div></div></section>
+
+<section class="block" id="s4-5" data-section="ch4"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Improve efficiency with automation</h2>
+  <p>Operational efficiency is what turns panel management from a reactive administrative burden into a scalable resource. Practitioners focused on reducing time to recruit, automating repetitive tasks, and moving away from scattered, manual systems, using both built-in workflows and custom automations.</p>
+  <div class="callout"><h4 class="rv">Productive teams integrate</h4><p>According to User Interviews internal data, highly effective teams (running more than 100 sessions) were more likely to connect Zoom (54.5% vs 45.5%) and Microsoft (26.9% vs 17.8%). This doesn't establish causation, but it suggests more productive teams integrate tools into their workflows.</p></div>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card green"><h4>Make it easy for stakeholders to say yes</h4><p>Orrin Ward launched "Project Easy Peasy" so B2B account managers could review participant contact requests with a single button press to approve or reject.</p></div>
+    <div class="card brown"><h4>Long-term consent contracts</h4><p>One ResearchOps lead at a biosciences organization replaced per-session consent forms with a one-year master consent agreement administered through DocuSign, lowering the barrier for every booking.</p></div>
+    <div class="card terra"><h4>Database integrations</h4><p>Agustina Di Clemente partnered with her data team to integrate Snowflake directly into Great Question, automatically syncing panelist attributes instead of manually pulling demographic lists.</p></div>
+    <div class="card violet"><h4>Self-serve models</h4><p>Jen Cardey's "Research Lite" at TripAdvisor let PMs and designers use the panel independently, reducing reliance on the Research Ops team for every request.</p></div>
+  </div></div>
+</div></section>
+
+<section class="block" id="s4-6" data-section="ch4"><div class="wrap"><div class="col">
+  <h2 class="sec rv">Measure success</h2>
+  <p>Activity is easy to measure: sessions run, emails sent, participants recruited. But activity is not the same as success. A panel is successful when it solves the problem it was built to solve, and that problem is different from team to team. Before choosing a metric, go back to the reason you built the panel in the first place.</p>
+  <p>Were you trying to shorten time to recruitment? Improve the quality of your insights? Democratize who could run research? Reduce reliance on expensive external recruiters? A growing contact count can feel like progress even if half those contacts have gone cold. The right metric distinguishes a panel that is working from one that only looks busy.</p>
+  </div>
+  <div class="tbl-wrap"><table class="tbl"><thead><tr><th>Metric area</th><th>Reason to measure it</th><th>What to track</th><th>Benchmark</th></tr></thead><tbody>
+    <tr><td>Time to data</td><td>Your goal is to speed up recruitment</td><td>Time from approval to first session filled; time to all sessions completed</td><td>Compare against your pre-panel baseline</td></tr>
+    <tr><td>Source quality and incidence</td><td>Your goal is to improve participant quality</td><td>Recruitment incidence or eligibility rate; unusable-session rate; participant-source mix</td><td>Establish your own baseline and monitor trends</td></tr>
+    <tr><td>Project success rates</td><td>Projects used to stall or fail before completion</td><td>How often studies ran under quota; how often projects were delayed or cancelled for low incidence</td><td>Compare against baseline and investigate recurring misses</td></tr>
+    <tr><td>Panel size and health</td><td>You need a healthy standing bench, especially for niche populations</td><td>Churn rate, total contacts, active/inactive, % participated, % in cooldown</td><td>User Interviews puts median contacts among thriving teams at ~3,200</td></tr>
+    <tr><td>Research access and utilization</td><td>Your goal is to increase access to research</td><td>Studies run by non-researchers; number or share of eligible teams using the panel</td><td>Compare against baseline or adoption target</td></tr>
+    <tr><td>Cost efficiency</td><td>Your goal is to reduce reliance on external recruiting</td><td>External recruiting spend; cost per recruited participant or study</td><td>Compare against your pre-panel baseline</td></tr>
+  </tbody></table></div>
+  <div class="col"><p>Metrics can't tell you exactly what to do next, but they give you a place to start forming hypotheses and looking for the story underneath. Choose the one or two measures that map most directly to why your panel exists, then use them consistently.</p></div>
+</div></section>
+
+<section class="block" id="s4-7" data-section="ch4"><div class="wrap"><div class="col">
+  <h2 class="sec rv">When to shut down a panel</h2>
+  <p>Even after employing the tactics above, panels can still fail due to supply, demand, organizational, or strategic factors. Knowing when the underlying conditions have changed is just as important as knowing how to keep a panel going.</p>
+  </div>
+  <div class="strip-wrap"><div class="strip">
+    <div class="card green"><h4>Lack of internal buy-in</h4><p>Ted Kendall described an initiative at a previous company killed simply because "the VP of marketing didn't like panels, and she was very strong in her opinions."</p></div>
+    <div class="card brown"><h4>Low engagement and wasted effort</h4><p>Joanne Van Vranken's panel was disbanded after two years. "It really hasn't become what we had hoped it would become." Part of the problem: "We never were actually able to communicate to the firm as a whole what the panel was actually for."</p></div>
+    <div class="card terra"><h4>Shifting priorities, no dedicated time</h4><p>Weiyan Chee's panel "wittled away" because "all these different priorities took up most of my time." Mirjam De Klepper saw something similar when the broader project changed direction.</p></div>
+    <div class="card violet"><h4>Layoffs and strategic pivots</h4><p>Emily Wever's panel ended overnight when "the research team was eliminated at the company," with "maybe eighteen hours between the email and the layoff the next morning."</p></div>
+    <div class="card sky"><h4>Planned ephemerality</h4><p>Not every panel is meant to last forever. Rachel Wigen-Toccalino structures hers to wrap up after a defined period; her team hasn't "extended it beyond six months."</p></div>
+  </div></div>
+</div></section>
+
+<section class="block" id="s4-8" data-section="ch4"><div class="wrap"><div class="col">
+  <h2 class="sec rv">The panel is never finished</h2>
+  <p class="lead">Deciding whether to build or buy, making the case for the investment, setting the panel up, and keeping it alive are not four separate projects. They're parts of one continuous commitment to the people who help shape your product.</p>
+  <p>So if you're staring down the maintenance phase and feeling the momentum slip, that's not necessarily a sign you've failed. It's the normal physics of a panel. Panels are subject to entropy. Keeping one healthy is the price of having a standing bench of real users ready to answer your hardest questions when you need them.</p>
+  <p>Very few research assets pay off like that. Almost none of them run themselves.</p>
+</div></div></section>
+
+<section class="block authors-sec" id="authors"><div class="wrap">
+  <h2 class="sec rv">About the authors</h2>
+  <div class="authors-grid">
+    <div class="author"><div><h4 class="rv"><a href="https://www.linkedin.com/in/donald-cox-6455435/" target="_blank" rel="noopener">Donald Cox</a></h4><p>User Experience Researcher at Ping Identity and a Contextual Design practitioner whose projects have spanned computer security, healthcare, power grid operation, and humanitarian demining. Donald holds an M.Sc. in Human Computer Interaction from the University of Calgary.</p></div></div>
+    <div class="author"><div><h4 class="rv"><a href="https://www.linkedin.com/in/alex-x-jones" target="_blank" rel="noopener">Alex Jones</a></h4><p>Lead Product Researcher at usecure and former Head of Market and UX Research at OpenMoney, with a background spanning finance and technology. A qual and quant practitioner based in Greater Manchester.</p></div></div>
+    <div class="author"><div><h4 class="rv"><a href="https://www.linkedin.com/in/natalieathomas/" target="_blank" rel="noopener">Natalie Thomas</a></h4><p>Director of Digital Experience and UX Strategy at The Good and founder of Clipses.ai, a qualitative research tool that turns interview recordings into searchable transcripts and highlight reels.</p></div></div>
+    <div class="author"><div><h4 class="rv"><a href="https://www.linkedin.com/in/andrewwismer" target="_blank" rel="noopener">Andrew Wismer</a></h4><p>Solution Experience Validation Lead at HP, where he defines how customer experience is measured, validated, and operationalized at scale. Andrew holds a Ph.D. in Human Factors and Cognitive Psychology from the University of Central Florida.</p></div></div>
+  </div>
+  <p class="note">This series is a volunteer project of the <a href="https://researchops.community/" target="_blank" rel="noopener">ResearchOps Community</a>'s Participant Lifecycle initiative, based on interviews with 25 practitioners.</p>
+</div></section>
+
+<section class="next"><div class="wrap">
+  <p class="k">Back to the start</p>
+  <a href="#ch1"><span class="n">1</span>The realities of panels</a>
+</div></section>
+
+<footer><div class="wrap"><span>By <a href="https://www.linkedin.com/in/donald-cox-6455435/" target="_blank" rel="noopener">Donald Cox</a>, <a href="https://www.linkedin.com/in/alex-x-jones" target="_blank" rel="noopener">Alex Jones</a>, <a href="https://www.linkedin.com/in/natalieathomas/" target="_blank" rel="noopener">Natalie Thomas</a>, and <a href="https://www.linkedin.com/in/andrewwismer" target="_blank" rel="noopener">Andrew Wismer</a> for the ResearchOps Community</span><span>Participant Lifecycle project. Based on interviews with 25 practitioners.</span></div></footer>
+</main>
+
+<script>
+(function(){
+  const body=document.body, toggle=document.getElementById('navToggle'), scrim=document.getElementById('scrim');
+  const mq=window.matchMedia('(max-width:1100px)');
+  const reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  function setNav(open){ body.classList.toggle('nav-open',open); toggle.setAttribute('aria-expanded',String(open)); }
+  setNav(!window.matchMedia('(max-width:760px)').matches);
+  toggle.addEventListener('click',()=>setNav(!body.classList.contains('nav-open')));
+  scrim.addEventListener('click',()=>setNav(false));
+  document.querySelectorAll('.sidenav a').forEach(a=>a.addEventListener('click',()=>{ if(mq.matches) setNav(false); }));
+  document.addEventListener('keydown',e=>{ if(e.key==='Escape') setNav(false); });
+
+  /* reveal */
+  const rv=[...document.querySelectorAll('.rv')];
+  if(reduce){ rv.forEach(e=>e.classList.add('in')); }
+  else{
+    const ro=new IntersectionObserver(es=>es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in'); ro.unobserve(e.target);} }),{rootMargin:'0px 0px -10% 0px',threshold:0.1});
+    rv.forEach(e=>ro.observe(e));
+  }
+
+  /* pinned horizontal strips */
+  const strips=[...document.querySelectorAll('.strip-wrap')];
+  strips.forEach(w=>{
+    const pin=document.createElement('div'); pin.className='pin'; const track=w.querySelector('.strip'); w.insertBefore(pin,track);
+    const prev=w.previousElementSibling;
+    if(prev&&prev.classList.contains('col')){
+      const last=prev.lastElementChild;
+      if(last&&/^H[23]$/.test(last.tagName)){ const c=document.createElement('div'); c.className='col'; c.appendChild(last); pin.appendChild(c); }
+      else if(prev.children.length<=2&&prev.querySelector('h2,h3')&&!prev.querySelector('.callout,.quote,.case,.stats')){ pin.appendChild(prev); }
+    }
+    pin.appendChild(track);
+    pin.querySelectorAll('.rv').forEach(e=>e.classList.add('in'));
+  });
+  const coarse=window.matchMedia('(pointer: coarse)').matches;
+  function layout(){
+    strips.forEach(w=>{
+      const pin0=w.querySelector('.pin');
+      if(innerWidth>1100){ pin0.style.width='auto'; const pl=pin0.getBoundingClientRect().left; pin0.style.width=(innerWidth-pl)+'px'; }
+      else { pin0.style.marginLeft=''; pin0.style.width=''; }
+      const pin=w.querySelector('.pin'), track=w.querySelector('.strip');
+      track.style.transform='';
+      const cards=track.children, last=cards[cards.length-1];
+      const pad=parseFloat(getComputedStyle(track).paddingLeft)||0;
+      const dist=Math.ceil(last.getBoundingClientRect().right+pad-pin.getBoundingClientRect().right);
+      if(reduce||coarse||dist<=0){ w.classList.add('native'); w.style.height=''; w._dist=0; return; }
+      w.classList.remove('native'); w._dist=dist;
+      const top=pin.offsetHeight>innerHeight-48 ? innerHeight-pin.offsetHeight-24 : (innerHeight-pin.offsetHeight)/2;
+      w._top=top; pin.style.top=top+'px';
+      w.style.height=(pin.offsetHeight+dist)+'px';
+    });
+    onScroll();
+  }
+  function onScroll(){
+    strips.forEach(w=>{
+      if(!w._dist) return;
+      const r=w.getBoundingClientRect();
+      const p=Math.min(1,Math.max(0,(w._top-r.top)/w._dist));
+      w.querySelector('.strip').style.transform='translateX('+(-p*w._dist)+'px)';
+    });
+  }
+  addEventListener('scroll',onScroll,{passive:true});
+  addEventListener('resize',layout);
+  document.getElementById('main').addEventListener('transitionend',e=>{ if(e.propertyName==='padding-left') layout(); });
+  toggle.addEventListener('click',()=>setTimeout(layout,400));
+  if(document.fonts&&document.fonts.ready) document.fonts.ready.then(layout); layout();
+  setTimeout(layout,600);
+
+  /* scroll spy */
+  const links=[...document.querySelectorAll('.sidenav a[href^="#"]')];
+  const byId=Object.fromEntries(links.map(a=>[a.getAttribute('href').slice(1),a]));
+  const chLinks={}; links.forEach(a=>{ if(a.dataset.ch) chLinks[a.dataset.ch]=a; });
+  const targets=[...document.querySelectorAll('[data-section],[data-chapter]')];
+  let current=null;
+  function setActive(el){
+    if(!el||el===current) return; current=el;
+    links.forEach(a=>a.classList.remove('active'));
+    const id=el.id, ch=el.dataset.section||id;
+    if(byId[id]) byId[id].classList.add('active');
+    if(chLinks[ch]) chLinks[ch].classList.add('active');
+    const act=byId[id]||chLinks[ch]; if(act){ const r=act.getBoundingClientRect(); if(r.top<80||r.bottom>innerHeight-40) act.scrollIntoView({block:'center',behavior:'smooth'}); }
+  }
+  const io=new IntersectionObserver(entries=>{
+    const vis=entries.filter(e=>e.isIntersecting).sort((a,b)=>a.boundingClientRect.top-b.boundingClientRect.top);
+    if(vis.length) setActive(vis[0].target);
+  },{rootMargin:'-35% 0px -55% 0px',threshold:0});
+  targets.forEach(t=>io.observe(t));
+})();
+</script>
+</body>
+</html>
